@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * APIATO setting container.
+ *
+ * This file is part of the APIATO setting container.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @license    Proprietary
+ * @copyright  Copyright (C) kalistratov.ru, All rights reserved.
+ * @link       https://kalistratov.ru
+ *
+ * @apiGroup Setting
+ * @apiName updateSetting
+ * @apiUse SettingsSuccessSingleResponse
+ *
+ * @api {patch} /v1/settings Обновить
+ * @apiDescription Обновить данные настройки.
+ *
+ * @apiVersion 1.0.0
+ * @apiPermission Аутентифицированный пользователь
+ *
+ * @apiBody {String} key Уникальный ключ
+ * @apiBody {String|Int|Array} value Значение
+ * @apiBody {String=string,int,data} type=string Тип хранения настройки
+ *
+ * @apiExample {js} NodeJS Axios (String TYPE):
+const axios = require('axios');
+const qs = require('qs');
+let data = qs.stringify({
+    'key': 'user.#1.orders.table',
+    'value': 'hello'
+});
+
+let config = {
+    method: 'patch',
+    url: 'api.domain.test/v1/settings',
+    headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer {access_token}',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': 'refreshToken={refresh_token}'
+    },
+    data : data
+};
+
+axios(config);
+ * @apiExample {js} NodeJS Axios (Data TYPE):
+const axios = require('axios');
+const qs = require('qs');
+let data = qs.stringify({
+    'key': 'user.#1.orders.table',
+    'value': [
+        'total' : 10,
+        'page': 5
+    ],
+    'type': 'data'
+});
+
+let config = {
+    method: 'patch',
+    url: 'api.domain.test/v1/settings',
+    headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer {access_token}',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': 'refreshToken={refresh_token}'
+    },
+    data : data
+};
+
+axios(config);
+ */
+
+use App\Containers\Vendor\Setting\Facades\Container;
+use App\Containers\Vendor\Setting\UI\API\Controllers\UpdateSettingController;
+use Illuminate\Support\Facades\Route;
+
+Route::patch(Container::getApiUri(), UpdateSettingController::class)
+    ->name('api_settings_update_setting')
+    ->middleware(['auth:api']);
